@@ -2,12 +2,39 @@
 #CONSTANTS
 ###########################
 
+from os import error
+from unittest import result
+
+
 DIGITS = '0123456789'
 
 ############################
-#TOKENS
+#CONSTANTS
 ###########################
 
+DIGITS = '0123456789'
+
+############################
+#ERRORS
+###########################
+
+class Error:
+    def __init__(self, error_name,details):
+        self.error_name = error_name
+        self.details = details
+        
+    def as_string(self):
+        result = f'{self.error_name}: {self.details}'
+        return result
+    
+class IllegalCharError(Error):
+    def __init__(self, details):
+        super().__init__('Illegal Character', details)
+        
+        
+############################
+#TOKENS
+###########################       
 import token
 
 
@@ -21,7 +48,7 @@ TT_LPAREN   = 'LPAREN'
 TT_RPAREN   = 'RPAREN'
 
 class Token:
-    def __init__(self, type_, value):
+    def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
 
@@ -32,7 +59,7 @@ class Token:
 ############################
 #LEXER
 ###########################
-class Lexe:
+class Lexer:
     def __init__(self, text):
         self.text = text
         self.pos = -1
@@ -52,25 +79,28 @@ class Lexe:
             elif self.current_char in DIGITS:
                 tokens.append(self.make_number())
             elif self.current_char == '+':
-                tokens.append(Token(TT_PLUS, '+'))
+                tokens.append(Token(TT_PLUS))
                 self.advance()
             elif self.current_char == '-':
-                tokens.append(Token(TT_MINUS, '-'))
+                tokens.append(Token(TT_MINUS))
                 self.advance()
             elif self.current_char == '*':
-                tokens.append(Token(TT_MUL, '*'))
+                tokens.append(Token(TT_MUL))
                 self.advance()
             elif self.current_char == '/':
-                tokens.append(Token(TT_DIV, '/'))
+                tokens.append(Token(TT_DIV))
                 self.advance()
             elif self.current_char == '(':
-                tokens.append(Token(TT_LPAREN, '('))
+                tokens.append(Token(TT_LPAREN))
                 self.advance()
             elif self.current_char == ')':
-                tokens.append(Token(TT_RPAREN, ')'))
+                tokens.append(Token(TT_RPAREN))
                 self.advance()
-                
-        return tokens
+            else:
+                char = self.current_char
+                self.advance()
+                return [], IllegalCharError("'" + char + "'")
+        return tokens , None
     
     def make_number(self):
         num_str = ''
@@ -89,3 +119,14 @@ class Lexe:
             return Token(TT_INT, int(num_str))
         else:
             return Token(TT_FLOAT, float(num_str))
+        
+##########################
+#RUN
+##########################
+
+
+def run(text):
+    lexer = Lexer(text)
+    tokens , error = lexer.make_tokens()
+    return tokens, error
+    
