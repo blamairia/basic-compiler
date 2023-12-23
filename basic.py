@@ -1,150 +1,118 @@
-#######################################
-# CONSTANTS
-#######################################
+import ply.lex as lex
+import ply.yacc as yacc
 
-DIGITS = '0123456789'
+# Define the list of token names
+tokens = (
+    'TEXT',
+    'STAR',
+    'UNDER',
+    'LBK',
+    'RBK',
+    'LP',
+    'RP',
+    'LB',
+    'RB',
+    'SEP',
+    'VAR',
+    'DEF',
+    'FUNC',
+    'PARAGRAPH'
+)
 
-#######################################
-# ERRORS
-#######################################
+# Regular expressions for tokens
+t_STAR = r'\*'
+t_UNDER = r'_'
+t_LBK = r'\{'
+t_RBK = r'\}'
+t_LP = r'\('
+t_RP = r'\)'
+t_LB = r'\['
+t_RB = r'\]'
+t_SEP = r'\"[^\"]*\"'  # Matches a sequence between quotes
+t_VAR = r'\$[a-zA-Z0-9]+'
+t_DEF = r'\#def'
+t_FUNC = r'\@[a-zA-Z0-9_]+'
 
-class Error:
-    def __init__(self, pos_start, pos_end, error_name, details):
-        self.pos_start = pos_start
-        self.pos_end = pos_end
-        self.error_name = error_name
-        self.details = details
+def t_PARAGRAPH(t):
+    r'(\n\n)+'
+    return t
+
+def t_TEXT(t):
+    r'[^*\_{}\[\]()\"#$@\n]+'
+    return t
+
+# Track line numbers
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+# Characters to ignore (spaces and tabs)
+t_ignore = ' \t'
+
+# Error handling for illegal characters
+def t_error(t):
+    print(f"Illegal character '{t.value[0]}'")
+    t.lexer.skip(1)
+
+# Build the lexer
+lexer = lex.lex()
+
+
     
-    def as_string(self):
-        result  = f'{self.error_name}: {self.details}\n'
-        result += f'File {self.pos_start.fn}, line {self.pos_start.ln + 1}'
-        return result
+def p_start(p):
+    '''start : start one_def
+             | start reg_block
+             | empty'''
+    if len(p) == 2:  # Only one item means it's 'empty' or a single block.
+        p[0] = [] if p[1] is None else [p[1]]
+    else:
+        p[0] = (p[1] if p[1] is not None else []) + [p[2]]
 
-class IllegalCharError(Error):
-    def __init__(self, pos_start, pos_end, details):
-        super().__init__(pos_start, pos_end, 'Illegal Character', details)
 
-#######################################
-# POSITION
-#######################################
+def p_one_def(p):
+    'one_def : DEF FUNC LP SEP RP LB smd RB'
+    # Handle a definition here
 
-class Position:
-    def __init__(self, idx, ln, col, fn, ftxt):
-        self.idx = idx
-        self.ln = ln
-        self.col = col
-        self.fn = fn
-        self.ftxt = ftxt
+def p_smd(p):
+    '''smd : smd reg_block
+           | reg_block'''
+    # Handle SMD structure here
 
-    def advance(self, current_char):
-        self.idx += 1
-        self.col += 1
+def p_reg_block(p):
+    '''reg_block : TEXT
+                 | STAR in_bold_italic STAR
+                 | UNDER in_bold_italic UNDER
+                 | LBK smd RBK LP TEXT RP
+                 | PARAGRAPH
+                 | FUNC LB smd RB
+                 | VAR'''
+    # Handle regular block here
 
-        if current_char == '\n':
-            self.ln += 1
-            self.col = 0
+def p_in_bold_italic(p):
+    '''in_bold_italic : TEXT
+                      | LBK smd RBK LP TEXT RP
+                      | PARAGRAPH
+                      | FUNC LB smd RB
+                      | VAR'''
+    # Handle in bold italic here
 
-        return self
+def p_empty(p):
+    'empty :'
+    pass
 
-    def copy(self):
-        return Position(self.idx, self.ln, self.col, self.fn, self.ftxt)
+# Error rule for syntax errors
+def p_error(p):
+    print("Syntax error in input!")
 
-#######################################
-# TOKENS
-#######################################
+# Build the parser
+parser = yacc.yacc()
 
-TT_INT		= 'INT'
-TT_FLOAT    = 'FLOAT'
-TT_PLUS     = 'PLUS'
-TT_MINUS    = 'MINUS'
-TT_MUL      = 'MUL'
-TT_DIV      = 'DIV'
-TT_LPAREN   = 'LPAREN'
-TT_RPAREN   = 'RPAREN'
+# Test the parser
+def test_parser(input_string):
+    result = parser.parse(input_string, lexer=lexer)
+    return result
 
-class Token:
-    def __init__(self, type_, value=None):
-        self.type = type_
-        self.value = value
-    
-    def __repr__(self):
-        if self.value: return f'{self.type}:{self.value}'
-        return f'{self.type}'
-
-#######################################
-# LEXER
-#######################################
-
-class Lexer:
-    def __init__(self, fn, text):
-        self.fn = fn
-        self.text = text
-        self.pos = Position(-1, 0, -1, fn, text)
-        self.current_char = None
-        self.advance()
-    
-    def advance(self):
-        self.pos.advance(self.current_char)
-        self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
-
-    def make_tokens(self):
-        tokens = []
-
-        while self.current_char != None:
-            if self.current_char in ' \t':
-                self.advance()
-            elif self.current_char in DIGITS:
-                tokens.append(self.make_number())
-            elif self.current_char == '+':
-                tokens.append(Token(TT_PLUS))
-                self.advance()
-            elif self.current_char == '-':
-                tokens.append(Token(TT_MINUS))
-                self.advance()
-            elif self.current_char == '*':
-                tokens.append(Token(TT_MUL))
-                self.advance()
-            elif self.current_char == '/':
-                tokens.append(Token(TT_DIV))
-                self.advance()
-            elif self.current_char == '(':
-                tokens.append(Token(TT_LPAREN))
-                self.advance()
-            elif self.current_char == ')':
-                tokens.append(Token(TT_RPAREN))
-                self.advance()
-            else:
-                pos_start = self.pos.copy()
-                char = self.current_char
-                self.advance()
-                return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
-
-        return tokens, None
-
-    def make_number(self):
-        num_str = ''
-        dot_count = 0
-
-        while self.current_char != None and self.current_char in DIGITS + '.':
-            if self.current_char == '.':
-                if dot_count == 1: break
-                dot_count += 1
-                num_str += '.'
-            else:
-                num_str += self.current_char
-            self.advance()
-
-        if dot_count == 0:
-            return Token(TT_INT, int(num_str))
-        else:
-            return Token(TT_FLOAT, float(num_str))
-
-#######################################
-# RUN
-#######################################
-
-def run(fn, text):
-    lexer = Lexer(fn, text)
-    tokens, error = lexer.make_tokens()
-
-    return tokens, error
+# Replace this with your SMD input text
+test_string = "Your SMD language input text *bold* here."
+result = test_parser(test_string)
+print(result)
