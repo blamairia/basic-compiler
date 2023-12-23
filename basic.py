@@ -1,7 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 
-# Define the list of token names
+
 tokens = (
     'TEXT',
     'STAR',
@@ -19,7 +19,7 @@ tokens = (
     'PARAGRAPH'
 )
 
-# Regular expressions for tokens
+# Regular express
 t_STAR = r'\*'
 t_UNDER = r'_'
 t_LBK = r'\{'
@@ -46,7 +46,6 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Characters to ignore (spaces and tabs)
 t_ignore = ' \t'
 
 # Error handling for illegal characters
@@ -71,12 +70,12 @@ def p_start(p):
 
 def p_one_def(p):
     'one_def : DEF FUNC LP SEP RP LB smd RB'
-    # Handle a definition here
+    
 
 def p_smd(p):
     '''smd : smd reg_block
            | reg_block'''
-    # Handle SMD structure here
+    
 
 def p_reg_block(p):
     '''reg_block : TEXT
@@ -86,7 +85,7 @@ def p_reg_block(p):
                  | PARAGRAPH
                  | FUNC LB smd RB
                  | VAR'''
-    # Handle regular block here
+    
 
 def p_in_bold_italic(p):
     '''in_bold_italic : TEXT
@@ -112,7 +111,7 @@ def test_parser(input_string):
     result = parser.parse(input_string, lexer=lexer)
     return result
 
-# Replace this with your SMD input text
-test_string = "Your SMD language input text *bold* here."
+
+test_string = "SMD dd"
 result = test_parser(test_string)
 print(result)
