@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'DEF FUNC LB LBK LP PARAGRAPH RB RBK RP SEP STAR TEXT UNDER VARstart : start one_def\n             | start reg_block\n             | emptyone_def : DEF FUNC LP SEP RP LB smd RBsmd : smd reg_block\n           | reg_blockreg_block : TEXT\n                 | STAR in_bold_italic STAR\n                 | UNDER in_bold_italic UNDER\n                 | LBK smd RBK LP TEXT RP\n                 | PARAGRAPH\n                 | FUNC LB smd RB\n                 | VARin_bold_italic : TEXT\n                      | LBK smd RBK LP TEXT RP\n                      | PARAGRAPH\n                      | FUNC LB smd RB\n                      | VARempty :'
+_lr_signature = 'DEF FUNC LB LBK LP PARAGRAPH RB RBK RP SEP STAR TEXT UNDER VARstart : one_def\n             | start element\n             | emptyone_def : DEF FUNC LP SEP RP LB elements RBelements : element\n                | elements elementreg_block : TEXT\n                 | STAR bold_element STAR\n                 | UNDER italic_element UNDER\n                 | LBK smd RBK LP TEXT RP\n                 | PARAGRAPH\n                 | FUNC LB arguments RP\n                 | VARsmd : reg_block\n           | smd reg_blockelement : text_element\n               | bold_element\n               | italic_element\n               | link_element\n               | variable_element\n               | paragraph_element\n               | function_definition\n               | function_calltext_element : TEXTbold_element : STAR TEXT STARitalic_element : UNDER TEXT UNDERlink_element : LB TEXT RB LP TEXT RPvariable_element : VARparagraph_element : PARAGRAPHfunction_definition : DEF FUNC LP SEP RP LB elements RBfunction_call : FUNC LP arguments RParguments : argument\n                 | arguments SEP argumentargument : TEXT\n                | VAR\n                | FUNCempty :'
     
-_lr_action_items = {'DEF':([0,1,2,3,4,7,11,12,26,29,33,43,46,],[-19,5,-3,-1,-2,-7,-11,-13,-8,-9,-12,-10,-4,]),'TEXT':([0,1,2,3,4,7,8,9,10,11,12,14,17,22,23,25,26,27,28,29,31,33,35,36,38,41,43,44,46,],[-19,7,-3,-1,-2,-7,16,16,7,-11,-13,7,7,7,-6,7,-8,7,7,-9,-5,-12,7,40,42,7,-10,7,-4,]),'STAR':([0,1,2,3,4,7,10,11,12,14,15,16,17,18,20,22,23,25,26,27,28,29,31,33,35,39,41,43,44,45,46,],[-19,8,-3,-1,-2,-7,8,-11,-13,8,26,-14,8,-16,-18,8,-6,8,-8,8,8,-9,-5,-12,8,-17,8,-10,8,-15,-4,]),'UNDER':([0,1,2,3,4,7,10,11,12,14,16,17,18,20,21,22,23,25,26,27,28,29,31,33,35,39,41,43,44,45,46,],[-19,9,-3,-1,-2,-7,9,-11,-13,9,-14,9,-16,-18,29,9,-6,9,-8,9,9,-9,-5,-12,9,-17,9,-10,9,-15,-4,]),'LBK':([0,1,2,3,4,7,8,9,10,11,12,14,17,22,23,25,26,27,28,29,31,33,35,41,43,44,46,],[-19,10,-3,-1,-2,-7,17,17,10,-11,-13,10,10,10,-6,10,-8,10,10,-9,-5,-12,10,10,-10,10,-4,]),'PARAGRAPH':([0,1,2,3,4,7,8,9,10,11,12,14,17,22,23,25,26,27,28,29,31,33,35,41,43,44,46,],[-19,11,-3,-1,-2,-7,18,18,11,-11,-13,11,11,11,-6,11,-8,11,11,-9,-5,-12,11,11,-10,11,-4,]),'FUNC':([0,1,2,3,4,5,7,8,9,10,11,12,14,17,22,23,25,26,27,28,29,31,33,35,41,43,44,46,],[-19,6,-3,-1,-2,13,-7,19,19,6,-11,-13,6,6,6,-6,6,-8,6,6,-9,-5,-12,6,6,-10,6,-4,]),'VAR':([0,1,2,3,4,7,8,9,10,11,12,14,17,22,23,25,26,27,28,29,31,33,35,41,43,44,46,],[-19,12,-3,-1,-2,-7,20,20,12,-11,-13,12,12,12,-6,12,-8,12,12,-9,-5,-12,12,12,-10,12,-4,]),'$end':([0,1,2,3,4,7,11,12,26,29,33,43,46,],[-19,0,-3,-1,-2,-7,-11,-13,-8,-9,-12,-10,-4,]),'LB':([6,19,37,],[14,28,41,]),'RBK':([7,11,12,22,23,26,27,29,31,33,43,],[-7,-11,-13,30,-6,-8,34,-9,-5,-12,-10,]),'RB':([7,11,12,23,25,26,29,31,33,35,43,44,],[-7,-11,-13,-6,33,-8,-9,-5,-12,39,-10,46,]),'LP':([13,30,34,],[24,36,38,]),'SEP':([24,],[32,]),'RP':([32,40,42,],[37,43,45,]),}
+_lr_action_items = {'DEF':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,29,30,41,47,48,49,50,51,52,53,54,55,],[4,20,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,-25,-26,-31,20,-27,20,20,-5,20,-4,-6,-30,]),'TEXT':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,27,29,30,39,41,42,47,48,49,50,51,52,53,54,55,],[-37,14,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,23,24,25,-28,-29,36,-25,-26,44,-31,36,14,-27,14,14,-5,14,-4,-6,-30,]),'STAR':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,23,29,30,41,47,48,49,50,51,52,53,54,55,],[-37,15,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,29,-25,-26,-31,15,-27,15,15,-5,15,-4,-6,-30,]),'UNDER':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,24,29,30,41,47,48,49,50,51,52,53,54,55,],[-37,16,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,30,-25,-26,-31,16,-27,16,16,-5,16,-4,-6,-30,]),'LB':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,29,30,41,43,45,47,48,49,50,51,52,53,54,55,],[-37,17,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,-25,-26,-31,47,49,17,-27,17,17,-5,17,-4,-6,-30,]),'VAR':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,27,29,30,41,42,47,48,49,50,51,52,53,54,55,],[-37,18,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,37,-25,-26,-31,37,18,-27,18,18,-5,18,-4,-6,-30,]),'PARAGRAPH':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,29,30,41,47,48,49,50,51,52,53,54,55,],[-37,19,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,-25,-26,-31,19,-27,19,19,-5,19,-4,-6,-30,]),'FUNC':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19,20,27,29,30,41,42,47,48,49,50,51,52,53,54,55,],[-37,21,-1,-3,22,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,26,33,-25,-26,-31,33,21,-27,21,21,-5,21,-4,-6,-30,]),'$end':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,18,19,29,30,41,48,53,55,],[-37,0,-1,-3,-2,-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,-25,-26,-31,-27,-4,-30,]),'RB':([6,7,8,9,10,11,12,13,14,18,19,25,29,30,41,48,50,51,52,54,55,],[-16,-17,-18,-19,-20,-21,-22,-23,-24,-28,-29,31,-25,-26,-31,-27,53,-5,55,-6,-30,]),'LP':([21,22,26,31,],[27,28,32,39,]),'SEP':([28,32,33,34,35,36,37,46,],[38,40,-36,42,-32,-34,-35,-33,]),'RP':([33,34,35,36,37,38,40,44,46,],[-36,41,-32,-34,-35,43,45,48,-33,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'start':([0,],[1,]),'empty':([0,],[2,]),'one_def':([1,],[3,]),'reg_block':([1,10,14,17,22,25,27,28,35,41,44,],[4,23,23,23,31,31,31,23,31,23,31,]),'in_bold_italic':([8,9,],[15,21,]),'smd':([10,14,17,28,41,],[22,25,27,35,44,]),}
+_lr_goto_items = {'start':([0,],[1,]),'one_def':([0,],[2,]),'empty':([0,],[3,]),'element':([1,47,49,50,52,],[5,51,51,54,54,]),'text_element':([1,47,49,50,52,],[6,6,6,6,6,]),'bold_element':([1,47,49,50,52,],[7,7,7,7,7,]),'italic_element':([1,47,49,50,52,],[8,8,8,8,8,]),'link_element':([1,47,49,50,52,],[9,9,9,9,9,]),'variable_element':([1,47,49,50,52,],[10,10,10,10,10,]),'paragraph_element':([1,47,49,50,52,],[11,11,11,11,11,]),'function_definition':([1,47,49,50,52,],[12,12,12,12,12,]),'function_call':([1,47,49,50,52,],[13,13,13,13,13,]),'arguments':([27,],[34,]),'argument':([27,42,],[35,46,]),'elements':([47,49,],[50,52,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,23 +27,41 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> start","S'",1,None,None,None),
-  ('start -> start one_def','start',2,'p_start','basic.py',75),
-  ('start -> start reg_block','start',2,'p_start','basic.py',76),
-  ('start -> empty','start',1,'p_start','basic.py',77),
-  ('one_def -> DEF FUNC LP SEP RP LB smd RB','one_def',8,'p_one_def','basic.py',81),
-  ('smd -> smd reg_block','smd',2,'p_smd','basic.py',85),
-  ('smd -> reg_block','smd',1,'p_smd','basic.py',86),
-  ('reg_block -> TEXT','reg_block',1,'p_reg_block','basic.py',90),
-  ('reg_block -> STAR in_bold_italic STAR','reg_block',3,'p_reg_block','basic.py',91),
-  ('reg_block -> UNDER in_bold_italic UNDER','reg_block',3,'p_reg_block','basic.py',92),
-  ('reg_block -> LBK smd RBK LP TEXT RP','reg_block',6,'p_reg_block','basic.py',93),
-  ('reg_block -> PARAGRAPH','reg_block',1,'p_reg_block','basic.py',94),
-  ('reg_block -> FUNC LB smd RB','reg_block',4,'p_reg_block','basic.py',95),
-  ('reg_block -> VAR','reg_block',1,'p_reg_block','basic.py',96),
-  ('in_bold_italic -> TEXT','in_bold_italic',1,'p_in_bold_italic','basic.py',100),
-  ('in_bold_italic -> LBK smd RBK LP TEXT RP','in_bold_italic',6,'p_in_bold_italic','basic.py',101),
-  ('in_bold_italic -> PARAGRAPH','in_bold_italic',1,'p_in_bold_italic','basic.py',102),
-  ('in_bold_italic -> FUNC LB smd RB','in_bold_italic',4,'p_in_bold_italic','basic.py',103),
-  ('in_bold_italic -> VAR','in_bold_italic',1,'p_in_bold_italic','basic.py',104),
-  ('empty -> <empty>','empty',0,'p_empty','basic.py',108),
+  ('start -> one_def','start',1,'p_start','basic.py',55),
+  ('start -> start element','start',2,'p_start','basic.py',56),
+  ('start -> empty','start',1,'p_start','basic.py',57),
+  ('one_def -> DEF FUNC LP SEP RP LB elements RB','one_def',8,'p_one_def','basic.py',64),
+  ('elements -> element','elements',1,'p_elements','basic.py',72),
+  ('elements -> elements element','elements',2,'p_elements','basic.py',73),
+  ('reg_block -> TEXT','reg_block',1,'p_reg_block','basic.py',79),
+  ('reg_block -> STAR bold_element STAR','reg_block',3,'p_reg_block','basic.py',80),
+  ('reg_block -> UNDER italic_element UNDER','reg_block',3,'p_reg_block','basic.py',81),
+  ('reg_block -> LBK smd RBK LP TEXT RP','reg_block',6,'p_reg_block','basic.py',82),
+  ('reg_block -> PARAGRAPH','reg_block',1,'p_reg_block','basic.py',83),
+  ('reg_block -> FUNC LB arguments RP','reg_block',4,'p_reg_block','basic.py',84),
+  ('reg_block -> VAR','reg_block',1,'p_reg_block','basic.py',85),
+  ('smd -> reg_block','smd',1,'p_smd','basic.py',99),
+  ('smd -> smd reg_block','smd',2,'p_smd','basic.py',100),
+  ('element -> text_element','element',1,'p_element','basic.py',106),
+  ('element -> bold_element','element',1,'p_element','basic.py',107),
+  ('element -> italic_element','element',1,'p_element','basic.py',108),
+  ('element -> link_element','element',1,'p_element','basic.py',109),
+  ('element -> variable_element','element',1,'p_element','basic.py',110),
+  ('element -> paragraph_element','element',1,'p_element','basic.py',111),
+  ('element -> function_definition','element',1,'p_element','basic.py',112),
+  ('element -> function_call','element',1,'p_element','basic.py',113),
+  ('text_element -> TEXT','text_element',1,'p_text_element','basic.py',117),
+  ('bold_element -> STAR TEXT STAR','bold_element',3,'p_bold_element','basic.py',121),
+  ('italic_element -> UNDER TEXT UNDER','italic_element',3,'p_italic_element','basic.py',125),
+  ('link_element -> LB TEXT RB LP TEXT RP','link_element',6,'p_link_element','basic.py',129),
+  ('variable_element -> VAR','variable_element',1,'p_variable_element','basic.py',133),
+  ('paragraph_element -> PARAGRAPH','paragraph_element',1,'p_paragraph_element','basic.py',137),
+  ('function_definition -> DEF FUNC LP SEP RP LB elements RB','function_definition',8,'p_function_definition','basic.py',141),
+  ('function_call -> FUNC LP arguments RP','function_call',4,'p_function_call','basic.py',147),
+  ('arguments -> argument','arguments',1,'p_arguments','basic.py',151),
+  ('arguments -> arguments SEP argument','arguments',3,'p_arguments','basic.py',152),
+  ('argument -> TEXT','argument',1,'p_argument','basic.py',156),
+  ('argument -> VAR','argument',1,'p_argument','basic.py',157),
+  ('argument -> FUNC','argument',1,'p_argument','basic.py',158),
+  ('empty -> <empty>','empty',0,'p_empty','basic.py',162),
 ]

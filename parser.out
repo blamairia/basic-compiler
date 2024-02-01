@@ -3,721 +3,880 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> start
-Rule 1     start -> start one_def
-Rule 2     start -> start reg_block
+Rule 1     start -> one_def
+Rule 2     start -> start element
 Rule 3     start -> empty
-Rule 4     one_def -> DEF FUNC LP SEP RP LB smd RB
-Rule 5     smd -> smd reg_block
-Rule 6     smd -> reg_block
+Rule 4     one_def -> DEF FUNC LP SEP RP LB elements RB
+Rule 5     elements -> element
+Rule 6     elements -> elements element
 Rule 7     reg_block -> TEXT
-Rule 8     reg_block -> STAR in_bold_italic STAR
-Rule 9     reg_block -> UNDER in_bold_italic UNDER
+Rule 8     reg_block -> STAR bold_element STAR
+Rule 9     reg_block -> UNDER italic_element UNDER
 Rule 10    reg_block -> LBK smd RBK LP TEXT RP
 Rule 11    reg_block -> PARAGRAPH
-Rule 12    reg_block -> FUNC LB smd RB
+Rule 12    reg_block -> FUNC LB arguments RP
 Rule 13    reg_block -> VAR
-Rule 14    in_bold_italic -> TEXT
-Rule 15    in_bold_italic -> LBK smd RBK LP TEXT RP
-Rule 16    in_bold_italic -> PARAGRAPH
-Rule 17    in_bold_italic -> FUNC LB smd RB
-Rule 18    in_bold_italic -> VAR
-Rule 19    empty -> <empty>
+Rule 14    smd -> reg_block
+Rule 15    smd -> smd reg_block
+Rule 16    element -> text_element
+Rule 17    element -> bold_element
+Rule 18    element -> italic_element
+Rule 19    element -> link_element
+Rule 20    element -> variable_element
+Rule 21    element -> paragraph_element
+Rule 22    element -> function_definition
+Rule 23    element -> function_call
+Rule 24    text_element -> TEXT
+Rule 25    bold_element -> STAR TEXT STAR
+Rule 26    italic_element -> UNDER TEXT UNDER
+Rule 27    link_element -> LB TEXT RB LP TEXT RP
+Rule 28    variable_element -> VAR
+Rule 29    paragraph_element -> PARAGRAPH
+Rule 30    function_definition -> DEF FUNC LP SEP RP LB elements RB
+Rule 31    function_call -> FUNC LP arguments RP
+Rule 32    arguments -> argument
+Rule 33    arguments -> arguments SEP argument
+Rule 34    argument -> TEXT
+Rule 35    argument -> VAR
+Rule 36    argument -> FUNC
+Rule 37    empty -> <empty>
 
 Terminals, with rules where they appear
 
-DEF                  : 4
-FUNC                 : 4 12 17
-LB                   : 4 12 17
-LBK                  : 10 15
-LP                   : 4 10 15
-PARAGRAPH            : 11 16
-RB                   : 4 12 17
-RBK                  : 10 15
-RP                   : 4 10 15
-SEP                  : 4
-STAR                 : 8 8
-TEXT                 : 7 10 14 15
-UNDER                : 9 9
-VAR                  : 13 18
+DEF                  : 4 30
+FUNC                 : 4 12 30 31 36
+LB                   : 4 12 27 30
+LBK                  : 10
+LP                   : 4 10 27 30 31
+PARAGRAPH            : 11 29
+RB                   : 4 27 30
+RBK                  : 10
+RP                   : 4 10 12 27 30 31
+SEP                  : 4 30 33
+STAR                 : 8 8 25 25
+TEXT                 : 7 10 24 25 26 27 27 34
+UNDER                : 9 9 26 26
+VAR                  : 13 28 35
 error                : 
 
 Nonterminals, with rules where they appear
 
+argument             : 32 33
+arguments            : 12 31 33
+bold_element         : 8 17
+element              : 2 5 6
+elements             : 4 6 30
 empty                : 3
-in_bold_italic       : 8 9
+function_call        : 23
+function_definition  : 22
+italic_element       : 9 18
+link_element         : 19
 one_def              : 1
-reg_block            : 2 5 6
-smd                  : 4 5 10 12 15 17
-start                : 1 2 0
+paragraph_element    : 21
+reg_block            : 14 15
+smd                  : 10 15
+start                : 2 0
+text_element         : 16
+variable_element     : 20
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . start
-    (1) start -> . start one_def
-    (2) start -> . start reg_block
+    (1) start -> . one_def
+    (2) start -> . start element
     (3) start -> . empty
-    (19) empty -> .
+    (4) one_def -> . DEF FUNC LP SEP RP LB elements RB
+    (37) empty -> .
 
-    DEF             reduce using rule 19 (empty -> .)
-    TEXT            reduce using rule 19 (empty -> .)
-    STAR            reduce using rule 19 (empty -> .)
-    UNDER           reduce using rule 19 (empty -> .)
-    LBK             reduce using rule 19 (empty -> .)
-    PARAGRAPH       reduce using rule 19 (empty -> .)
-    FUNC            reduce using rule 19 (empty -> .)
-    VAR             reduce using rule 19 (empty -> .)
-    $end            reduce using rule 19 (empty -> .)
+  ! shift/reduce conflict for DEF resolved as shift
+    DEF             shift and go to state 4
+    TEXT            reduce using rule 37 (empty -> .)
+    STAR            reduce using rule 37 (empty -> .)
+    UNDER           reduce using rule 37 (empty -> .)
+    LB              reduce using rule 37 (empty -> .)
+    VAR             reduce using rule 37 (empty -> .)
+    PARAGRAPH       reduce using rule 37 (empty -> .)
+    FUNC            reduce using rule 37 (empty -> .)
+    $end            reduce using rule 37 (empty -> .)
+
+  ! DEF             [ reduce using rule 37 (empty -> .) ]
 
     start                          shift and go to state 1
-    empty                          shift and go to state 2
+    one_def                        shift and go to state 2
+    empty                          shift and go to state 3
 
 state 1
 
     (0) S' -> start .
-    (1) start -> start . one_def
-    (2) start -> start . reg_block
-    (4) one_def -> . DEF FUNC LP SEP RP LB smd RB
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (2) start -> start . element
+    (16) element -> . text_element
+    (17) element -> . bold_element
+    (18) element -> . italic_element
+    (19) element -> . link_element
+    (20) element -> . variable_element
+    (21) element -> . paragraph_element
+    (22) element -> . function_definition
+    (23) element -> . function_call
+    (24) text_element -> . TEXT
+    (25) bold_element -> . STAR TEXT STAR
+    (26) italic_element -> . UNDER TEXT UNDER
+    (27) link_element -> . LB TEXT RB LP TEXT RP
+    (28) variable_element -> . VAR
+    (29) paragraph_element -> . PARAGRAPH
+    (30) function_definition -> . DEF FUNC LP SEP RP LB elements RB
+    (31) function_call -> . FUNC LP arguments RP
 
-    DEF             shift and go to state 5
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            shift and go to state 14
+    STAR            shift and go to state 15
+    UNDER           shift and go to state 16
+    LB              shift and go to state 17
+    VAR             shift and go to state 18
+    PARAGRAPH       shift and go to state 19
+    DEF             shift and go to state 20
+    FUNC            shift and go to state 21
 
-    one_def                        shift and go to state 3
-    reg_block                      shift and go to state 4
+    element                        shift and go to state 5
+    text_element                   shift and go to state 6
+    bold_element                   shift and go to state 7
+    italic_element                 shift and go to state 8
+    link_element                   shift and go to state 9
+    variable_element               shift and go to state 10
+    paragraph_element              shift and go to state 11
+    function_definition            shift and go to state 12
+    function_call                  shift and go to state 13
 
 state 2
 
-    (3) start -> empty .
+    (1) start -> one_def .
 
-    DEF             reduce using rule 3 (start -> empty .)
-    TEXT            reduce using rule 3 (start -> empty .)
-    STAR            reduce using rule 3 (start -> empty .)
-    UNDER           reduce using rule 3 (start -> empty .)
-    LBK             reduce using rule 3 (start -> empty .)
-    PARAGRAPH       reduce using rule 3 (start -> empty .)
-    FUNC            reduce using rule 3 (start -> empty .)
-    VAR             reduce using rule 3 (start -> empty .)
-    $end            reduce using rule 3 (start -> empty .)
+    TEXT            reduce using rule 1 (start -> one_def .)
+    STAR            reduce using rule 1 (start -> one_def .)
+    UNDER           reduce using rule 1 (start -> one_def .)
+    LB              reduce using rule 1 (start -> one_def .)
+    VAR             reduce using rule 1 (start -> one_def .)
+    PARAGRAPH       reduce using rule 1 (start -> one_def .)
+    DEF             reduce using rule 1 (start -> one_def .)
+    FUNC            reduce using rule 1 (start -> one_def .)
+    $end            reduce using rule 1 (start -> one_def .)
 
 
 state 3
 
-    (1) start -> start one_def .
+    (3) start -> empty .
 
-    DEF             reduce using rule 1 (start -> start one_def .)
-    TEXT            reduce using rule 1 (start -> start one_def .)
-    STAR            reduce using rule 1 (start -> start one_def .)
-    UNDER           reduce using rule 1 (start -> start one_def .)
-    LBK             reduce using rule 1 (start -> start one_def .)
-    PARAGRAPH       reduce using rule 1 (start -> start one_def .)
-    FUNC            reduce using rule 1 (start -> start one_def .)
-    VAR             reduce using rule 1 (start -> start one_def .)
-    $end            reduce using rule 1 (start -> start one_def .)
+    TEXT            reduce using rule 3 (start -> empty .)
+    STAR            reduce using rule 3 (start -> empty .)
+    UNDER           reduce using rule 3 (start -> empty .)
+    LB              reduce using rule 3 (start -> empty .)
+    VAR             reduce using rule 3 (start -> empty .)
+    PARAGRAPH       reduce using rule 3 (start -> empty .)
+    DEF             reduce using rule 3 (start -> empty .)
+    FUNC            reduce using rule 3 (start -> empty .)
+    $end            reduce using rule 3 (start -> empty .)
 
 
 state 4
 
-    (2) start -> start reg_block .
+    (4) one_def -> DEF . FUNC LP SEP RP LB elements RB
 
-    DEF             reduce using rule 2 (start -> start reg_block .)
-    TEXT            reduce using rule 2 (start -> start reg_block .)
-    STAR            reduce using rule 2 (start -> start reg_block .)
-    UNDER           reduce using rule 2 (start -> start reg_block .)
-    LBK             reduce using rule 2 (start -> start reg_block .)
-    PARAGRAPH       reduce using rule 2 (start -> start reg_block .)
-    FUNC            reduce using rule 2 (start -> start reg_block .)
-    VAR             reduce using rule 2 (start -> start reg_block .)
-    $end            reduce using rule 2 (start -> start reg_block .)
+    FUNC            shift and go to state 22
 
 
 state 5
 
-    (4) one_def -> DEF . FUNC LP SEP RP LB smd RB
+    (2) start -> start element .
 
-    FUNC            shift and go to state 13
+    TEXT            reduce using rule 2 (start -> start element .)
+    STAR            reduce using rule 2 (start -> start element .)
+    UNDER           reduce using rule 2 (start -> start element .)
+    LB              reduce using rule 2 (start -> start element .)
+    VAR             reduce using rule 2 (start -> start element .)
+    PARAGRAPH       reduce using rule 2 (start -> start element .)
+    DEF             reduce using rule 2 (start -> start element .)
+    FUNC            reduce using rule 2 (start -> start element .)
+    $end            reduce using rule 2 (start -> start element .)
 
 
 state 6
 
-    (12) reg_block -> FUNC . LB smd RB
+    (16) element -> text_element .
 
-    LB              shift and go to state 14
+    TEXT            reduce using rule 16 (element -> text_element .)
+    STAR            reduce using rule 16 (element -> text_element .)
+    UNDER           reduce using rule 16 (element -> text_element .)
+    LB              reduce using rule 16 (element -> text_element .)
+    VAR             reduce using rule 16 (element -> text_element .)
+    PARAGRAPH       reduce using rule 16 (element -> text_element .)
+    DEF             reduce using rule 16 (element -> text_element .)
+    FUNC            reduce using rule 16 (element -> text_element .)
+    $end            reduce using rule 16 (element -> text_element .)
+    RB              reduce using rule 16 (element -> text_element .)
 
 
 state 7
 
-    (7) reg_block -> TEXT .
+    (17) element -> bold_element .
 
-    DEF             reduce using rule 7 (reg_block -> TEXT .)
-    TEXT            reduce using rule 7 (reg_block -> TEXT .)
-    STAR            reduce using rule 7 (reg_block -> TEXT .)
-    UNDER           reduce using rule 7 (reg_block -> TEXT .)
-    LBK             reduce using rule 7 (reg_block -> TEXT .)
-    PARAGRAPH       reduce using rule 7 (reg_block -> TEXT .)
-    FUNC            reduce using rule 7 (reg_block -> TEXT .)
-    VAR             reduce using rule 7 (reg_block -> TEXT .)
-    $end            reduce using rule 7 (reg_block -> TEXT .)
-    RBK             reduce using rule 7 (reg_block -> TEXT .)
-    RB              reduce using rule 7 (reg_block -> TEXT .)
+    TEXT            reduce using rule 17 (element -> bold_element .)
+    STAR            reduce using rule 17 (element -> bold_element .)
+    UNDER           reduce using rule 17 (element -> bold_element .)
+    LB              reduce using rule 17 (element -> bold_element .)
+    VAR             reduce using rule 17 (element -> bold_element .)
+    PARAGRAPH       reduce using rule 17 (element -> bold_element .)
+    DEF             reduce using rule 17 (element -> bold_element .)
+    FUNC            reduce using rule 17 (element -> bold_element .)
+    $end            reduce using rule 17 (element -> bold_element .)
+    RB              reduce using rule 17 (element -> bold_element .)
 
 
 state 8
 
-    (8) reg_block -> STAR . in_bold_italic STAR
-    (14) in_bold_italic -> . TEXT
-    (15) in_bold_italic -> . LBK smd RBK LP TEXT RP
-    (16) in_bold_italic -> . PARAGRAPH
-    (17) in_bold_italic -> . FUNC LB smd RB
-    (18) in_bold_italic -> . VAR
+    (18) element -> italic_element .
 
-    TEXT            shift and go to state 16
-    LBK             shift and go to state 17
-    PARAGRAPH       shift and go to state 18
-    FUNC            shift and go to state 19
-    VAR             shift and go to state 20
+    TEXT            reduce using rule 18 (element -> italic_element .)
+    STAR            reduce using rule 18 (element -> italic_element .)
+    UNDER           reduce using rule 18 (element -> italic_element .)
+    LB              reduce using rule 18 (element -> italic_element .)
+    VAR             reduce using rule 18 (element -> italic_element .)
+    PARAGRAPH       reduce using rule 18 (element -> italic_element .)
+    DEF             reduce using rule 18 (element -> italic_element .)
+    FUNC            reduce using rule 18 (element -> italic_element .)
+    $end            reduce using rule 18 (element -> italic_element .)
+    RB              reduce using rule 18 (element -> italic_element .)
 
-    in_bold_italic                 shift and go to state 15
 
 state 9
 
-    (9) reg_block -> UNDER . in_bold_italic UNDER
-    (14) in_bold_italic -> . TEXT
-    (15) in_bold_italic -> . LBK smd RBK LP TEXT RP
-    (16) in_bold_italic -> . PARAGRAPH
-    (17) in_bold_italic -> . FUNC LB smd RB
-    (18) in_bold_italic -> . VAR
+    (19) element -> link_element .
 
-    TEXT            shift and go to state 16
-    LBK             shift and go to state 17
-    PARAGRAPH       shift and go to state 18
-    FUNC            shift and go to state 19
-    VAR             shift and go to state 20
+    TEXT            reduce using rule 19 (element -> link_element .)
+    STAR            reduce using rule 19 (element -> link_element .)
+    UNDER           reduce using rule 19 (element -> link_element .)
+    LB              reduce using rule 19 (element -> link_element .)
+    VAR             reduce using rule 19 (element -> link_element .)
+    PARAGRAPH       reduce using rule 19 (element -> link_element .)
+    DEF             reduce using rule 19 (element -> link_element .)
+    FUNC            reduce using rule 19 (element -> link_element .)
+    $end            reduce using rule 19 (element -> link_element .)
+    RB              reduce using rule 19 (element -> link_element .)
 
-    in_bold_italic                 shift and go to state 21
 
 state 10
 
-    (10) reg_block -> LBK . smd RBK LP TEXT RP
-    (5) smd -> . smd reg_block
-    (6) smd -> . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (20) element -> variable_element .
 
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            reduce using rule 20 (element -> variable_element .)
+    STAR            reduce using rule 20 (element -> variable_element .)
+    UNDER           reduce using rule 20 (element -> variable_element .)
+    LB              reduce using rule 20 (element -> variable_element .)
+    VAR             reduce using rule 20 (element -> variable_element .)
+    PARAGRAPH       reduce using rule 20 (element -> variable_element .)
+    DEF             reduce using rule 20 (element -> variable_element .)
+    FUNC            reduce using rule 20 (element -> variable_element .)
+    $end            reduce using rule 20 (element -> variable_element .)
+    RB              reduce using rule 20 (element -> variable_element .)
 
-    smd                            shift and go to state 22
-    reg_block                      shift and go to state 23
 
 state 11
 
-    (11) reg_block -> PARAGRAPH .
+    (21) element -> paragraph_element .
 
-    DEF             reduce using rule 11 (reg_block -> PARAGRAPH .)
-    TEXT            reduce using rule 11 (reg_block -> PARAGRAPH .)
-    STAR            reduce using rule 11 (reg_block -> PARAGRAPH .)
-    UNDER           reduce using rule 11 (reg_block -> PARAGRAPH .)
-    LBK             reduce using rule 11 (reg_block -> PARAGRAPH .)
-    PARAGRAPH       reduce using rule 11 (reg_block -> PARAGRAPH .)
-    FUNC            reduce using rule 11 (reg_block -> PARAGRAPH .)
-    VAR             reduce using rule 11 (reg_block -> PARAGRAPH .)
-    $end            reduce using rule 11 (reg_block -> PARAGRAPH .)
-    RBK             reduce using rule 11 (reg_block -> PARAGRAPH .)
-    RB              reduce using rule 11 (reg_block -> PARAGRAPH .)
+    TEXT            reduce using rule 21 (element -> paragraph_element .)
+    STAR            reduce using rule 21 (element -> paragraph_element .)
+    UNDER           reduce using rule 21 (element -> paragraph_element .)
+    LB              reduce using rule 21 (element -> paragraph_element .)
+    VAR             reduce using rule 21 (element -> paragraph_element .)
+    PARAGRAPH       reduce using rule 21 (element -> paragraph_element .)
+    DEF             reduce using rule 21 (element -> paragraph_element .)
+    FUNC            reduce using rule 21 (element -> paragraph_element .)
+    $end            reduce using rule 21 (element -> paragraph_element .)
+    RB              reduce using rule 21 (element -> paragraph_element .)
 
 
 state 12
 
-    (13) reg_block -> VAR .
+    (22) element -> function_definition .
 
-    DEF             reduce using rule 13 (reg_block -> VAR .)
-    TEXT            reduce using rule 13 (reg_block -> VAR .)
-    STAR            reduce using rule 13 (reg_block -> VAR .)
-    UNDER           reduce using rule 13 (reg_block -> VAR .)
-    LBK             reduce using rule 13 (reg_block -> VAR .)
-    PARAGRAPH       reduce using rule 13 (reg_block -> VAR .)
-    FUNC            reduce using rule 13 (reg_block -> VAR .)
-    VAR             reduce using rule 13 (reg_block -> VAR .)
-    $end            reduce using rule 13 (reg_block -> VAR .)
-    RBK             reduce using rule 13 (reg_block -> VAR .)
-    RB              reduce using rule 13 (reg_block -> VAR .)
+    TEXT            reduce using rule 22 (element -> function_definition .)
+    STAR            reduce using rule 22 (element -> function_definition .)
+    UNDER           reduce using rule 22 (element -> function_definition .)
+    LB              reduce using rule 22 (element -> function_definition .)
+    VAR             reduce using rule 22 (element -> function_definition .)
+    PARAGRAPH       reduce using rule 22 (element -> function_definition .)
+    DEF             reduce using rule 22 (element -> function_definition .)
+    FUNC            reduce using rule 22 (element -> function_definition .)
+    $end            reduce using rule 22 (element -> function_definition .)
+    RB              reduce using rule 22 (element -> function_definition .)
 
 
 state 13
 
-    (4) one_def -> DEF FUNC . LP SEP RP LB smd RB
+    (23) element -> function_call .
 
-    LP              shift and go to state 24
+    TEXT            reduce using rule 23 (element -> function_call .)
+    STAR            reduce using rule 23 (element -> function_call .)
+    UNDER           reduce using rule 23 (element -> function_call .)
+    LB              reduce using rule 23 (element -> function_call .)
+    VAR             reduce using rule 23 (element -> function_call .)
+    PARAGRAPH       reduce using rule 23 (element -> function_call .)
+    DEF             reduce using rule 23 (element -> function_call .)
+    FUNC            reduce using rule 23 (element -> function_call .)
+    $end            reduce using rule 23 (element -> function_call .)
+    RB              reduce using rule 23 (element -> function_call .)
 
 
 state 14
 
-    (12) reg_block -> FUNC LB . smd RB
-    (5) smd -> . smd reg_block
-    (6) smd -> . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (24) text_element -> TEXT .
 
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            reduce using rule 24 (text_element -> TEXT .)
+    STAR            reduce using rule 24 (text_element -> TEXT .)
+    UNDER           reduce using rule 24 (text_element -> TEXT .)
+    LB              reduce using rule 24 (text_element -> TEXT .)
+    VAR             reduce using rule 24 (text_element -> TEXT .)
+    PARAGRAPH       reduce using rule 24 (text_element -> TEXT .)
+    DEF             reduce using rule 24 (text_element -> TEXT .)
+    FUNC            reduce using rule 24 (text_element -> TEXT .)
+    $end            reduce using rule 24 (text_element -> TEXT .)
+    RB              reduce using rule 24 (text_element -> TEXT .)
 
-    smd                            shift and go to state 25
-    reg_block                      shift and go to state 23
 
 state 15
 
-    (8) reg_block -> STAR in_bold_italic . STAR
+    (25) bold_element -> STAR . TEXT STAR
 
-    STAR            shift and go to state 26
+    TEXT            shift and go to state 23
 
 
 state 16
 
-    (14) in_bold_italic -> TEXT .
+    (26) italic_element -> UNDER . TEXT UNDER
 
-    STAR            reduce using rule 14 (in_bold_italic -> TEXT .)
-    UNDER           reduce using rule 14 (in_bold_italic -> TEXT .)
+    TEXT            shift and go to state 24
 
 
 state 17
 
-    (15) in_bold_italic -> LBK . smd RBK LP TEXT RP
-    (5) smd -> . smd reg_block
-    (6) smd -> . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (27) link_element -> LB . TEXT RB LP TEXT RP
 
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            shift and go to state 25
 
-    smd                            shift and go to state 27
-    reg_block                      shift and go to state 23
 
 state 18
 
-    (16) in_bold_italic -> PARAGRAPH .
+    (28) variable_element -> VAR .
 
-    STAR            reduce using rule 16 (in_bold_italic -> PARAGRAPH .)
-    UNDER           reduce using rule 16 (in_bold_italic -> PARAGRAPH .)
+    TEXT            reduce using rule 28 (variable_element -> VAR .)
+    STAR            reduce using rule 28 (variable_element -> VAR .)
+    UNDER           reduce using rule 28 (variable_element -> VAR .)
+    LB              reduce using rule 28 (variable_element -> VAR .)
+    VAR             reduce using rule 28 (variable_element -> VAR .)
+    PARAGRAPH       reduce using rule 28 (variable_element -> VAR .)
+    DEF             reduce using rule 28 (variable_element -> VAR .)
+    FUNC            reduce using rule 28 (variable_element -> VAR .)
+    $end            reduce using rule 28 (variable_element -> VAR .)
+    RB              reduce using rule 28 (variable_element -> VAR .)
 
 
 state 19
 
-    (17) in_bold_italic -> FUNC . LB smd RB
+    (29) paragraph_element -> PARAGRAPH .
 
-    LB              shift and go to state 28
+    TEXT            reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    STAR            reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    UNDER           reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    LB              reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    VAR             reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    PARAGRAPH       reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    DEF             reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    FUNC            reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    $end            reduce using rule 29 (paragraph_element -> PARAGRAPH .)
+    RB              reduce using rule 29 (paragraph_element -> PARAGRAPH .)
 
 
 state 20
 
-    (18) in_bold_italic -> VAR .
+    (30) function_definition -> DEF . FUNC LP SEP RP LB elements RB
 
-    STAR            reduce using rule 18 (in_bold_italic -> VAR .)
-    UNDER           reduce using rule 18 (in_bold_italic -> VAR .)
+    FUNC            shift and go to state 26
 
 
 state 21
 
-    (9) reg_block -> UNDER in_bold_italic . UNDER
+    (31) function_call -> FUNC . LP arguments RP
 
-    UNDER           shift and go to state 29
+    LP              shift and go to state 27
 
 
 state 22
 
-    (10) reg_block -> LBK smd . RBK LP TEXT RP
-    (5) smd -> smd . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (4) one_def -> DEF FUNC . LP SEP RP LB elements RB
 
-    RBK             shift and go to state 30
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    LP              shift and go to state 28
 
-    reg_block                      shift and go to state 31
 
 state 23
 
-    (6) smd -> reg_block .
+    (25) bold_element -> STAR TEXT . STAR
 
-    RBK             reduce using rule 6 (smd -> reg_block .)
-    TEXT            reduce using rule 6 (smd -> reg_block .)
-    STAR            reduce using rule 6 (smd -> reg_block .)
-    UNDER           reduce using rule 6 (smd -> reg_block .)
-    LBK             reduce using rule 6 (smd -> reg_block .)
-    PARAGRAPH       reduce using rule 6 (smd -> reg_block .)
-    FUNC            reduce using rule 6 (smd -> reg_block .)
-    VAR             reduce using rule 6 (smd -> reg_block .)
-    RB              reduce using rule 6 (smd -> reg_block .)
+    STAR            shift and go to state 29
 
 
 state 24
 
-    (4) one_def -> DEF FUNC LP . SEP RP LB smd RB
+    (26) italic_element -> UNDER TEXT . UNDER
 
-    SEP             shift and go to state 32
+    UNDER           shift and go to state 30
 
 
 state 25
 
-    (12) reg_block -> FUNC LB smd . RB
-    (5) smd -> smd . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (27) link_element -> LB TEXT . RB LP TEXT RP
 
-    RB              shift and go to state 33
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    RB              shift and go to state 31
 
-    reg_block                      shift and go to state 31
 
 state 26
 
-    (8) reg_block -> STAR in_bold_italic STAR .
+    (30) function_definition -> DEF FUNC . LP SEP RP LB elements RB
 
-    DEF             reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    TEXT            reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    STAR            reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    UNDER           reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    LBK             reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    PARAGRAPH       reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    FUNC            reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    VAR             reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    $end            reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    RBK             reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
-    RB              reduce using rule 8 (reg_block -> STAR in_bold_italic STAR .)
+    LP              shift and go to state 32
 
 
 state 27
 
-    (15) in_bold_italic -> LBK smd . RBK LP TEXT RP
-    (5) smd -> smd . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (31) function_call -> FUNC LP . arguments RP
+    (32) arguments -> . argument
+    (33) arguments -> . arguments SEP argument
+    (34) argument -> . TEXT
+    (35) argument -> . VAR
+    (36) argument -> . FUNC
 
-    RBK             shift and go to state 34
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            shift and go to state 36
+    VAR             shift and go to state 37
+    FUNC            shift and go to state 33
 
-    reg_block                      shift and go to state 31
+    arguments                      shift and go to state 34
+    argument                       shift and go to state 35
 
 state 28
 
-    (17) in_bold_italic -> FUNC LB . smd RB
-    (5) smd -> . smd reg_block
-    (6) smd -> . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (4) one_def -> DEF FUNC LP . SEP RP LB elements RB
 
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    SEP             shift and go to state 38
 
-    smd                            shift and go to state 35
-    reg_block                      shift and go to state 23
 
 state 29
 
-    (9) reg_block -> UNDER in_bold_italic UNDER .
+    (25) bold_element -> STAR TEXT STAR .
 
-    DEF             reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    TEXT            reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    STAR            reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    UNDER           reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    LBK             reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    PARAGRAPH       reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    FUNC            reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    VAR             reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    $end            reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    RBK             reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
-    RB              reduce using rule 9 (reg_block -> UNDER in_bold_italic UNDER .)
+    TEXT            reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    STAR            reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    UNDER           reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    LB              reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    VAR             reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    PARAGRAPH       reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    DEF             reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    FUNC            reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    $end            reduce using rule 25 (bold_element -> STAR TEXT STAR .)
+    RB              reduce using rule 25 (bold_element -> STAR TEXT STAR .)
 
 
 state 30
 
-    (10) reg_block -> LBK smd RBK . LP TEXT RP
+    (26) italic_element -> UNDER TEXT UNDER .
 
-    LP              shift and go to state 36
+    TEXT            reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    STAR            reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    UNDER           reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    LB              reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    VAR             reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    PARAGRAPH       reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    DEF             reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    FUNC            reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    $end            reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
+    RB              reduce using rule 26 (italic_element -> UNDER TEXT UNDER .)
 
 
 state 31
 
-    (5) smd -> smd reg_block .
+    (27) link_element -> LB TEXT RB . LP TEXT RP
 
-    RBK             reduce using rule 5 (smd -> smd reg_block .)
-    TEXT            reduce using rule 5 (smd -> smd reg_block .)
-    STAR            reduce using rule 5 (smd -> smd reg_block .)
-    UNDER           reduce using rule 5 (smd -> smd reg_block .)
-    LBK             reduce using rule 5 (smd -> smd reg_block .)
-    PARAGRAPH       reduce using rule 5 (smd -> smd reg_block .)
-    FUNC            reduce using rule 5 (smd -> smd reg_block .)
-    VAR             reduce using rule 5 (smd -> smd reg_block .)
-    RB              reduce using rule 5 (smd -> smd reg_block .)
+    LP              shift and go to state 39
 
 
 state 32
 
-    (4) one_def -> DEF FUNC LP SEP . RP LB smd RB
+    (30) function_definition -> DEF FUNC LP . SEP RP LB elements RB
 
-    RP              shift and go to state 37
+    SEP             shift and go to state 40
 
 
 state 33
 
-    (12) reg_block -> FUNC LB smd RB .
+    (36) argument -> FUNC .
 
-    DEF             reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    TEXT            reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    STAR            reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    UNDER           reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    LBK             reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    PARAGRAPH       reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    FUNC            reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    VAR             reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    $end            reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    RBK             reduce using rule 12 (reg_block -> FUNC LB smd RB .)
-    RB              reduce using rule 12 (reg_block -> FUNC LB smd RB .)
+    RP              reduce using rule 36 (argument -> FUNC .)
+    SEP             reduce using rule 36 (argument -> FUNC .)
 
 
 state 34
 
-    (15) in_bold_italic -> LBK smd RBK . LP TEXT RP
+    (31) function_call -> FUNC LP arguments . RP
+    (33) arguments -> arguments . SEP argument
 
-    LP              shift and go to state 38
+    RP              shift and go to state 41
+    SEP             shift and go to state 42
 
 
 state 35
 
-    (17) in_bold_italic -> FUNC LB smd . RB
-    (5) smd -> smd . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (32) arguments -> argument .
 
-    RB              shift and go to state 39
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    RP              reduce using rule 32 (arguments -> argument .)
+    SEP             reduce using rule 32 (arguments -> argument .)
 
-    reg_block                      shift and go to state 31
 
 state 36
 
-    (10) reg_block -> LBK smd RBK LP . TEXT RP
+    (34) argument -> TEXT .
 
-    TEXT            shift and go to state 40
+    RP              reduce using rule 34 (argument -> TEXT .)
+    SEP             reduce using rule 34 (argument -> TEXT .)
 
 
 state 37
 
-    (4) one_def -> DEF FUNC LP SEP RP . LB smd RB
+    (35) argument -> VAR .
 
-    LB              shift and go to state 41
+    RP              reduce using rule 35 (argument -> VAR .)
+    SEP             reduce using rule 35 (argument -> VAR .)
 
 
 state 38
 
-    (15) in_bold_italic -> LBK smd RBK LP . TEXT RP
-
-    TEXT            shift and go to state 42
-
-
-state 39
-
-    (17) in_bold_italic -> FUNC LB smd RB .
-
-    STAR            reduce using rule 17 (in_bold_italic -> FUNC LB smd RB .)
-    UNDER           reduce using rule 17 (in_bold_italic -> FUNC LB smd RB .)
-
-
-state 40
-
-    (10) reg_block -> LBK smd RBK LP TEXT . RP
+    (4) one_def -> DEF FUNC LP SEP . RP LB elements RB
 
     RP              shift and go to state 43
 
 
-state 41
+state 39
 
-    (4) one_def -> DEF FUNC LP SEP RP LB . smd RB
-    (5) smd -> . smd reg_block
-    (6) smd -> . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (27) link_element -> LB TEXT RB LP . TEXT RP
 
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    TEXT            shift and go to state 44
 
-    smd                            shift and go to state 44
-    reg_block                      shift and go to state 23
 
-state 42
+state 40
 
-    (15) in_bold_italic -> LBK smd RBK LP TEXT . RP
+    (30) function_definition -> DEF FUNC LP SEP . RP LB elements RB
 
     RP              shift and go to state 45
 
 
+state 41
+
+    (31) function_call -> FUNC LP arguments RP .
+
+    TEXT            reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    STAR            reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    UNDER           reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    LB              reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    VAR             reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    PARAGRAPH       reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    DEF             reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    FUNC            reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    $end            reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+    RB              reduce using rule 31 (function_call -> FUNC LP arguments RP .)
+
+
+state 42
+
+    (33) arguments -> arguments SEP . argument
+    (34) argument -> . TEXT
+    (35) argument -> . VAR
+    (36) argument -> . FUNC
+
+    TEXT            shift and go to state 36
+    VAR             shift and go to state 37
+    FUNC            shift and go to state 33
+
+    argument                       shift and go to state 46
+
 state 43
 
-    (10) reg_block -> LBK smd RBK LP TEXT RP .
+    (4) one_def -> DEF FUNC LP SEP RP . LB elements RB
 
-    DEF             reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    TEXT            reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    STAR            reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    UNDER           reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    LBK             reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    PARAGRAPH       reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    FUNC            reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    VAR             reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    $end            reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    RBK             reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
-    RB              reduce using rule 10 (reg_block -> LBK smd RBK LP TEXT RP .)
+    LB              shift and go to state 47
 
 
 state 44
 
-    (4) one_def -> DEF FUNC LP SEP RP LB smd . RB
-    (5) smd -> smd . reg_block
-    (7) reg_block -> . TEXT
-    (8) reg_block -> . STAR in_bold_italic STAR
-    (9) reg_block -> . UNDER in_bold_italic UNDER
-    (10) reg_block -> . LBK smd RBK LP TEXT RP
-    (11) reg_block -> . PARAGRAPH
-    (12) reg_block -> . FUNC LB smd RB
-    (13) reg_block -> . VAR
+    (27) link_element -> LB TEXT RB LP TEXT . RP
 
-    RB              shift and go to state 46
-    TEXT            shift and go to state 7
-    STAR            shift and go to state 8
-    UNDER           shift and go to state 9
-    LBK             shift and go to state 10
-    PARAGRAPH       shift and go to state 11
-    FUNC            shift and go to state 6
-    VAR             shift and go to state 12
+    RP              shift and go to state 48
 
-    reg_block                      shift and go to state 31
 
 state 45
 
-    (15) in_bold_italic -> LBK smd RBK LP TEXT RP .
+    (30) function_definition -> DEF FUNC LP SEP RP . LB elements RB
 
-    STAR            reduce using rule 15 (in_bold_italic -> LBK smd RBK LP TEXT RP .)
-    UNDER           reduce using rule 15 (in_bold_italic -> LBK smd RBK LP TEXT RP .)
+    LB              shift and go to state 49
 
 
 state 46
 
-    (4) one_def -> DEF FUNC LP SEP RP LB smd RB .
+    (33) arguments -> arguments SEP argument .
 
-    DEF             reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    TEXT            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    STAR            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    UNDER           reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    LBK             reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    PARAGRAPH       reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    FUNC            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    VAR             reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
-    $end            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB smd RB .)
+    RP              reduce using rule 33 (arguments -> arguments SEP argument .)
+    SEP             reduce using rule 33 (arguments -> arguments SEP argument .)
 
+
+state 47
+
+    (4) one_def -> DEF FUNC LP SEP RP LB . elements RB
+    (5) elements -> . element
+    (6) elements -> . elements element
+    (16) element -> . text_element
+    (17) element -> . bold_element
+    (18) element -> . italic_element
+    (19) element -> . link_element
+    (20) element -> . variable_element
+    (21) element -> . paragraph_element
+    (22) element -> . function_definition
+    (23) element -> . function_call
+    (24) text_element -> . TEXT
+    (25) bold_element -> . STAR TEXT STAR
+    (26) italic_element -> . UNDER TEXT UNDER
+    (27) link_element -> . LB TEXT RB LP TEXT RP
+    (28) variable_element -> . VAR
+    (29) paragraph_element -> . PARAGRAPH
+    (30) function_definition -> . DEF FUNC LP SEP RP LB elements RB
+    (31) function_call -> . FUNC LP arguments RP
+
+    TEXT            shift and go to state 14
+    STAR            shift and go to state 15
+    UNDER           shift and go to state 16
+    LB              shift and go to state 17
+    VAR             shift and go to state 18
+    PARAGRAPH       shift and go to state 19
+    DEF             shift and go to state 20
+    FUNC            shift and go to state 21
+
+    elements                       shift and go to state 50
+    element                        shift and go to state 51
+    text_element                   shift and go to state 6
+    bold_element                   shift and go to state 7
+    italic_element                 shift and go to state 8
+    link_element                   shift and go to state 9
+    variable_element               shift and go to state 10
+    paragraph_element              shift and go to state 11
+    function_definition            shift and go to state 12
+    function_call                  shift and go to state 13
+
+state 48
+
+    (27) link_element -> LB TEXT RB LP TEXT RP .
+
+    TEXT            reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    STAR            reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    UNDER           reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    LB              reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    VAR             reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    PARAGRAPH       reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    DEF             reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    FUNC            reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    $end            reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+    RB              reduce using rule 27 (link_element -> LB TEXT RB LP TEXT RP .)
+
+
+state 49
+
+    (30) function_definition -> DEF FUNC LP SEP RP LB . elements RB
+    (5) elements -> . element
+    (6) elements -> . elements element
+    (16) element -> . text_element
+    (17) element -> . bold_element
+    (18) element -> . italic_element
+    (19) element -> . link_element
+    (20) element -> . variable_element
+    (21) element -> . paragraph_element
+    (22) element -> . function_definition
+    (23) element -> . function_call
+    (24) text_element -> . TEXT
+    (25) bold_element -> . STAR TEXT STAR
+    (26) italic_element -> . UNDER TEXT UNDER
+    (27) link_element -> . LB TEXT RB LP TEXT RP
+    (28) variable_element -> . VAR
+    (29) paragraph_element -> . PARAGRAPH
+    (30) function_definition -> . DEF FUNC LP SEP RP LB elements RB
+    (31) function_call -> . FUNC LP arguments RP
+
+    TEXT            shift and go to state 14
+    STAR            shift and go to state 15
+    UNDER           shift and go to state 16
+    LB              shift and go to state 17
+    VAR             shift and go to state 18
+    PARAGRAPH       shift and go to state 19
+    DEF             shift and go to state 20
+    FUNC            shift and go to state 21
+
+    elements                       shift and go to state 52
+    element                        shift and go to state 51
+    text_element                   shift and go to state 6
+    bold_element                   shift and go to state 7
+    italic_element                 shift and go to state 8
+    link_element                   shift and go to state 9
+    variable_element               shift and go to state 10
+    paragraph_element              shift and go to state 11
+    function_definition            shift and go to state 12
+    function_call                  shift and go to state 13
+
+state 50
+
+    (4) one_def -> DEF FUNC LP SEP RP LB elements . RB
+    (6) elements -> elements . element
+    (16) element -> . text_element
+    (17) element -> . bold_element
+    (18) element -> . italic_element
+    (19) element -> . link_element
+    (20) element -> . variable_element
+    (21) element -> . paragraph_element
+    (22) element -> . function_definition
+    (23) element -> . function_call
+    (24) text_element -> . TEXT
+    (25) bold_element -> . STAR TEXT STAR
+    (26) italic_element -> . UNDER TEXT UNDER
+    (27) link_element -> . LB TEXT RB LP TEXT RP
+    (28) variable_element -> . VAR
+    (29) paragraph_element -> . PARAGRAPH
+    (30) function_definition -> . DEF FUNC LP SEP RP LB elements RB
+    (31) function_call -> . FUNC LP arguments RP
+
+    RB              shift and go to state 53
+    TEXT            shift and go to state 14
+    STAR            shift and go to state 15
+    UNDER           shift and go to state 16
+    LB              shift and go to state 17
+    VAR             shift and go to state 18
+    PARAGRAPH       shift and go to state 19
+    DEF             shift and go to state 20
+    FUNC            shift and go to state 21
+
+    element                        shift and go to state 54
+    text_element                   shift and go to state 6
+    bold_element                   shift and go to state 7
+    italic_element                 shift and go to state 8
+    link_element                   shift and go to state 9
+    variable_element               shift and go to state 10
+    paragraph_element              shift and go to state 11
+    function_definition            shift and go to state 12
+    function_call                  shift and go to state 13
+
+state 51
+
+    (5) elements -> element .
+
+    RB              reduce using rule 5 (elements -> element .)
+    TEXT            reduce using rule 5 (elements -> element .)
+    STAR            reduce using rule 5 (elements -> element .)
+    UNDER           reduce using rule 5 (elements -> element .)
+    LB              reduce using rule 5 (elements -> element .)
+    VAR             reduce using rule 5 (elements -> element .)
+    PARAGRAPH       reduce using rule 5 (elements -> element .)
+    DEF             reduce using rule 5 (elements -> element .)
+    FUNC            reduce using rule 5 (elements -> element .)
+
+
+state 52
+
+    (30) function_definition -> DEF FUNC LP SEP RP LB elements . RB
+    (6) elements -> elements . element
+    (16) element -> . text_element
+    (17) element -> . bold_element
+    (18) element -> . italic_element
+    (19) element -> . link_element
+    (20) element -> . variable_element
+    (21) element -> . paragraph_element
+    (22) element -> . function_definition
+    (23) element -> . function_call
+    (24) text_element -> . TEXT
+    (25) bold_element -> . STAR TEXT STAR
+    (26) italic_element -> . UNDER TEXT UNDER
+    (27) link_element -> . LB TEXT RB LP TEXT RP
+    (28) variable_element -> . VAR
+    (29) paragraph_element -> . PARAGRAPH
+    (30) function_definition -> . DEF FUNC LP SEP RP LB elements RB
+    (31) function_call -> . FUNC LP arguments RP
+
+    RB              shift and go to state 55
+    TEXT            shift and go to state 14
+    STAR            shift and go to state 15
+    UNDER           shift and go to state 16
+    LB              shift and go to state 17
+    VAR             shift and go to state 18
+    PARAGRAPH       shift and go to state 19
+    DEF             shift and go to state 20
+    FUNC            shift and go to state 21
+
+    element                        shift and go to state 54
+    text_element                   shift and go to state 6
+    bold_element                   shift and go to state 7
+    italic_element                 shift and go to state 8
+    link_element                   shift and go to state 9
+    variable_element               shift and go to state 10
+    paragraph_element              shift and go to state 11
+    function_definition            shift and go to state 12
+    function_call                  shift and go to state 13
+
+state 53
+
+    (4) one_def -> DEF FUNC LP SEP RP LB elements RB .
+
+    TEXT            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    STAR            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    UNDER           reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    LB              reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    VAR             reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    PARAGRAPH       reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    DEF             reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    FUNC            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+    $end            reduce using rule 4 (one_def -> DEF FUNC LP SEP RP LB elements RB .)
+
+
+state 54
+
+    (6) elements -> elements element .
+
+    RB              reduce using rule 6 (elements -> elements element .)
+    TEXT            reduce using rule 6 (elements -> elements element .)
+    STAR            reduce using rule 6 (elements -> elements element .)
+    UNDER           reduce using rule 6 (elements -> elements element .)
+    LB              reduce using rule 6 (elements -> elements element .)
+    VAR             reduce using rule 6 (elements -> elements element .)
+    PARAGRAPH       reduce using rule 6 (elements -> elements element .)
+    DEF             reduce using rule 6 (elements -> elements element .)
+    FUNC            reduce using rule 6 (elements -> elements element .)
+
+
+state 55
+
+    (30) function_definition -> DEF FUNC LP SEP RP LB elements RB .
+
+    TEXT            reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    STAR            reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    UNDER           reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    LB              reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    VAR             reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    PARAGRAPH       reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    DEF             reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    FUNC            reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    $end            reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+    RB              reduce using rule 30 (function_definition -> DEF FUNC LP SEP RP LB elements RB .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for DEF in state 0 resolved as shift
